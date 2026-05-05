@@ -1,1432 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-AU">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spring — Prefabricated Living</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --cream: #F5F0E8;
-    --sand: #E8E0D0;
-    --forest: #2C4A3E;
-    --moss: #5A7A6A;
-    --bark: #3D3226;
-    --charcoal: #1A1A18;
-    --warm-white: #FDFBF7;
-    --terracotta: #C4724E;
-    --sage: #A3B5A0;
-    --stone: #9B948A;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--cream);
-    color: var(--charcoal);
-    overflow-x: hidden;
-    font-weight: 300;
-    line-height: 1.6;
-  }
-
-  h1, h2, h3, h4 {
-    font-family: 'DM Serif Display', serif;
-    font-weight: 400;
-    line-height: 1.1;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 1.5rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.4s, backdrop-filter 0.4s;
-  }
-  nav.scrolled {
-    background: rgba(245, 240, 232, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: var(--charcoal);
-    text-decoration: none;
-    letter-spacing: -0.02em;
-  }
-  .logo span { color: var(--forest); }
-  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
-  .nav-links a {
-    text-decoration: none;
-    color: var(--charcoal);
-    font-size: 0.85rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    position: relative;
-    transition: color 0.3s;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1.5px;
-    background: var(--forest);
-    transition: width 0.3s;
-  }
-  .nav-links a:hover::after { width: 100%; }
-  .nav-links a:hover { color: var(--forest); }
-  .nav-cta {
-    background: var(--forest) !important;
-    color: var(--warm-white) !important;
-    padding: 0.65rem 1.6rem;
-    border-radius: 100px;
-    font-size: 0.8rem !important;
-    letter-spacing: 0.08em;
-    transition: transform 0.3s, box-shadow 0.3s !important;
-  }
-  .nav-cta::after { display: none !important; }
-  .nav-cta:hover { transform: scale(1.04); box-shadow: 0 6px 24px rgba(44,74,62,0.25); }
-
-  /* ─── HERO ─── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 3rem 5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(163,181,160,0.35), transparent),
-      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(196,114,78,0.12), transparent),
-      linear-gradient(180deg, var(--cream) 0%, var(--sand) 100%);
-  }
-  .hero-grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.3;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-size: 200px;
-    pointer-events: none;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 900px;
-  }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--moss);
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.3s forwards;
-  }
-  .hero-tag::before {
-    content: '';
-    width: 28px; height: 1.5px;
-    background: var(--moss);
-  }
-  .hero h1 {
-    font-size: clamp(3.2rem, 7vw, 6.5rem);
-    color: var(--charcoal);
-    letter-spacing: -0.03em;
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.5s forwards;
-  }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--forest);
-  }
-  .hero-sub {
-    font-size: 1.15rem;
-    color: var(--stone);
-    max-width: 520px;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.7s forwards;
-  }
-  .hero-actions {
-    display: flex;
-    gap: 1.2rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.9s forwards;
-  }
-  .btn-primary {
-    background: var(--forest);
-    color: var(--warm-white);
-    padding: 1rem 2.4rem;
-    border-radius: 100px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: none;
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(44,74,62,0.3); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--charcoal);
-    padding: 1rem 2.4rem;
-    border-radius: 100px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border: 1.5px solid var(--charcoal);
-    transition: all 0.3s;
-    cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-  }
-  .btn-secondary:hover { background: var(--charcoal); color: var(--cream); }
-
-  /* Decorative floating shapes */
-  .hero-shapes {
-    position: absolute;
-    right: 5%; top: 15%;
-    width: 45vw; height: 70vh;
-    z-index: 1;
-  }
-  .shape {
-    position: absolute;
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    opacity: 0;
-    animation: morphIn 1.2s forwards;
-  }
-  .shape-1 {
-    width: 320px; height: 380px;
-    background: linear-gradient(135deg, var(--forest), var(--moss));
-    top: 5%; right: 10%;
-    animation-delay: 0.4s;
-    animation-duration: 1.4s;
-  }
-  .shape-2 {
-    width: 200px; height: 240px;
-    background: linear-gradient(135deg, var(--terracotta), #D4926E);
-    top: 40%; right: 35%;
-    animation-delay: 0.7s;
-    border-radius: 70% 30% 50% 50% / 40% 60% 40% 60%;
-  }
-  .shape-3 {
-    width: 150px; height: 150px;
-    background: var(--sand);
-    border: 2px solid var(--sage);
-    top: 15%; right: 45%;
-    animation-delay: 1s;
-    border-radius: 50%;
-  }
-  .shape-icon {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.4rem;
-    color: rgba(255,255,255,0.9);
-  }
-  .shape-3 .shape-icon { color: var(--moss); font-size: 1.8rem; }
-
-  /* ─── MARQUEE ─── */
-  .marquee-section {
-    padding: 2.5rem 0;
-    background: var(--forest);
-    overflow: hidden;
-  }
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: scroll 25s linear infinite;
-  }
-  .marquee-item {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 0 2.5rem;
-    white-space: nowrap;
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.3rem;
-    color: var(--sage);
-  }
-  .marquee-item .dot {
-    width: 6px; height: 6px;
-    background: var(--terracotta);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* ─── PRODUCTS ─── */
-  .products {
-    padding: 8rem 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 4rem;
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-  .section-header h2 {
-    font-size: clamp(2.4rem, 4vw, 3.5rem);
-    letter-spacing: -0.02em;
-  }
-  .section-header h2 em { font-style: italic; color: var(--forest); }
-  .section-header p {
-    max-width: 400px;
-    color: var(--stone);
-    font-size: 0.95rem;
-  }
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-  .product-card {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    aspect-ratio: 3/4;
-    cursor: pointer;
-    group: true;
-  }
-  .product-card-bg {
-    position: absolute;
-    inset: 0;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .product-card:hover .product-card-bg { transform: scale(1.05); }
-  .card-houses .product-card-bg {
-    background:
-      linear-gradient(180deg, rgba(30,40,35,0.3) 0%, rgba(20,28,24,0.85) 100%);
-  }
-  .card-gyms .product-card-bg {
-    background:
-      linear-gradient(180deg, rgba(45,35,25,0.3) 0%, rgba(30,22,15,0.85) 100%);
-  }
-  .card-saunas .product-card-bg {
-    background:
-      linear-gradient(180deg, rgba(80,45,20,0.3) 0%, rgba(50,28,12,0.85) 100%);
-  }
-  .card-baths .product-card-bg {
-    background:
-      linear-gradient(180deg, rgba(30,50,65,0.3) 0%, rgba(18,30,40,0.85) 100%);
-  }
-  .product-card-illustration {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .product-card-illustration svg {
-    width: 100%;
-    height: 100%;
-  }
-  /* Coming soon overlay */
-  .coming-soon .product-card-bg {
-    filter: saturate(0.4) brightness(0.85);
-  }
-  .coming-soon:hover .product-card-bg {
-    filter: saturate(0.6) brightness(0.9);
-  }
-  .coming-soon-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 0.35rem 1rem;
-    border-radius: 100px;
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: white;
-    margin-bottom: 0.8rem;
-  }
-  .product-card-content {
-    position: absolute;
-    inset: 0;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    z-index: 2;
-  }
-  .product-card-icon {
-    position: absolute;
-    top: 2rem; right: 2rem;
-    width: 50px; height: 50px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    transition: transform 0.3s;
-  }
-  .product-card:hover .product-card-icon { transform: rotate(-10deg) scale(1.1); }
-  .product-card-number {
-    font-family: 'DM Serif Display', serif;
-    font-size: 5rem;
-    color: rgba(255,255,255,0.08);
-    position: absolute;
-    top: 1.5rem; left: 2rem;
-    line-height: 1;
-  }
-  .product-card h3 {
-    font-size: 1.8rem;
-    color: white;
-    margin-bottom: 0.5rem;
-  }
-  .product-card p {
-    color: rgba(255,255,255,0.7);
-    font-size: 0.85rem;
-    line-height: 1.5;
-  }
-  .product-card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: 1.2rem;
-    text-decoration: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s, transform 0.3s;
-  }
-  .product-card:hover .product-card-link {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .product-card-link svg {
-    width: 16px; height: 16px;
-    transition: transform 0.3s;
-  }
-  .product-card:hover .product-card-link svg { transform: translateX(4px); }
-
-  /* ─── ABOUT / PROCESS ─── */
-  .about {
-    padding: 8rem 3rem;
-    background: var(--warm-white);
-  }
-  .about-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-  .about-visual {
-    position: relative;
-    height: 500px;
-  }
-  .about-block {
-    position: absolute;
-    border-radius: 20px;
-  }
-  .about-block-1 {
-    width: 65%; height: 70%;
-    top: 0; left: 0;
-    background: linear-gradient(135deg, var(--forest), var(--moss));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .about-block-1-inner {
-    text-align: center;
-    color: white;
-  }
-  .about-block-1-inner .big-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 4.5rem;
-    line-height: 1;
-  }
-  .about-block-1-inner p {
-    font-size: 0.85rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .about-block-2 {
-    width: 50%; height: 55%;
-    bottom: 0; right: 0;
-    background: linear-gradient(135deg, var(--terracotta), #D4926E);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .about-block-2-inner {
-    text-align: center;
-    color: white;
-  }
-  .about-block-2-inner .big-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 4.5rem;
-    line-height: 1;
-  }
-  .about-block-2-inner p {
-    font-size: 0.85rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .about-text h2 {
-    font-size: clamp(2.2rem, 3.5vw, 3rem);
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.02em;
-  }
-  .about-text h2 em { font-style: italic; color: var(--forest); }
-  .about-text > p {
-    color: var(--stone);
-    margin-bottom: 2.5rem;
-    font-size: 1.05rem;
-    line-height: 1.7;
-  }
-  .process-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  .step {
-    display: flex;
-    gap: 1.2rem;
-    align-items: flex-start;
-  }
-  .step-num {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: var(--forest);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .step-text h4 {
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
-  }
-  .step-text p {
-    font-size: 0.88rem;
-    color: var(--stone);
-  }
-
-  /* ─── FEATURES ─── */
-  .features {
-    padding: 8rem 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-  .feature-card {
-    background: var(--warm-white);
-    border-radius: 20px;
-    padding: 2.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.4s, box-shadow 0.4s;
-  }
-  .feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-  }
-  .feature-icon {
-    width: 52px; height: 52px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .feature-card:nth-child(1) .feature-icon { background: rgba(44,74,62,0.1); }
-  .feature-card:nth-child(2) .feature-icon { background: rgba(196,114,78,0.1); }
-  .feature-card:nth-child(3) .feature-icon { background: rgba(74,107,122,0.1); }
-  .feature-card:nth-child(4) .feature-icon { background: rgba(163,181,160,0.3); }
-  .feature-card:nth-child(5) .feature-icon { background: rgba(61,50,38,0.1); }
-  .feature-card:nth-child(6) .feature-icon { background: rgba(196,114,78,0.1); }
-  .feature-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 0.75rem;
-  }
-  .feature-card p {
-    color: var(--stone);
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-
-  /* ─── TESTIMONIALS ─── */
-  .testimonials {
-    padding: 8rem 3rem;
-    background: var(--forest);
-    position: relative;
-    overflow: hidden;
-  }
-  .testimonials::before {
-    content: '"';
-    font-family: 'DM Serif Display', serif;
-    font-size: 40rem;
-    color: rgba(255,255,255,0.03);
-    position: absolute;
-    top: -8rem; right: 5%;
-    line-height: 1;
-  }
-  .testimonials-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .testimonials h2 {
-    color: var(--sage);
-    font-size: clamp(2.2rem, 3.5vw, 3rem);
-    margin-bottom: 4rem;
-    letter-spacing: -0.02em;
-  }
-  .testimonials h2 em { font-style: italic; color: var(--terracotta); }
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-  .testimonial-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
-    padding: 2.5rem;
-    transition: background 0.3s;
-  }
-  .testimonial-card:hover { background: rgba(255,255,255,0.1); }
-  .testimonial-stars {
-    color: var(--terracotta);
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    margin-bottom: 1.2rem;
-  }
-  .testimonial-card blockquote {
-    color: rgba(255,255,255,0.8);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .testimonial-avatar {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: var(--moss);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-  .testimonial-author-info .name {
-    color: white;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-  .testimonial-author-info .role {
-    color: var(--sage);
-    font-size: 0.78rem;
-  }
-
-  /* ─── CTA ─── */
-  .cta {
-    padding: 8rem 3rem;
-    text-align: center;
-    position: relative;
-  }
-  .cta-inner {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  .cta h2 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    letter-spacing: -0.02em;
-    margin-bottom: 1.2rem;
-  }
-  .cta h2 em { font-style: italic; color: var(--forest); }
-  .cta p {
-    color: var(--stone);
-    font-size: 1.05rem;
-    margin-bottom: 2.5rem;
-    line-height: 1.7;
-  }
-  .cta-actions { display: flex; gap: 1rem; justify-content: center; }
-
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--charcoal);
-    padding: 5rem 3rem 2.5rem;
-    color: rgba(255,255,255,0.5);
-  }
-  .footer-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 4rem;
-  }
-  .footer-brand .logo {
-    color: white;
-    font-size: 1.4rem;
-    display: inline-block;
-    margin-bottom: 1rem;
-  }
-  .footer-brand p {
-    font-size: 0.88rem;
-    line-height: 1.7;
-    max-width: 300px;
-  }
-  .footer-col h4 {
-    color: white;
-    font-size: 0.95rem;
-    margin-bottom: 1.2rem;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col li { margin-bottom: 0.6rem; }
-  .footer-col a {
-    text-decoration: none;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    transition: color 0.3s;
-  }
-  .footer-col a:hover { color: var(--sage); }
-  .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding-top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-  }
-  .footer-social { display: flex; gap: 1rem; }
-  .footer-social a {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.5);
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: background 0.3s, color 0.3s;
-  }
-  .footer-social a:hover { background: var(--forest); color: white; }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes morphIn {
-    from { opacity: 0; transform: scale(0.6) rotate(-10deg); }
-    to { opacity: 1; transform: scale(1) rotate(0deg); }
-  }
-  @keyframes scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 1024px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-shapes { display: none; }
-    .about-inner { grid-template-columns: 1fr; gap: 3rem; }
-    .about-visual { height: 350px; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 768px) {
-    nav { padding: 1.2rem 1.5rem; }
-    .nav-links a:not(.nav-cta) { display: none; }
-    .hero { padding: 0 1.5rem 3rem; }
-    .products, .features, .cta { padding: 5rem 1.5rem; }
-    .about { padding: 5rem 1.5rem; }
-    .testimonials { padding: 5rem 1.5rem; }
-    .products-grid { grid-template-columns: 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
-    .cta-actions { flex-direction: column; align-items: center; }
-    .footer-top { grid-template-columns: 1fr; }
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spring Engineering — Prefab Homes, Decks & Built Structures</title>
+  <meta name="description" content="Spring designs and delivers engineered prefab homes, decks, extensions and outdoor structures across Australia." />
+  <meta name="theme-color" content="#0f2f2e" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" aria-label="Spring home">
+      <span class="brand-mark">S</span>
+      <span class="brand-text">Spring</span>
+    </a>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="logo">spring<span>.</span></a>
-  <div class="nav-links">
-    <a href="#products">Products</a>
-    <a href="#about">Process</a>
-    <a href="#features">Why Spring</a>
-    <a href="#contact" class="nav-cta">Get in Touch</a>
-  </div>
-</nav>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span>
+      <span class="sr-only">Open menu</span>
+    </button>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grain"></div>
-  <div class="hero-shapes">
-    <div class="shape shape-1">
-      <div class="shape-icon">🏠</div>
-    </div>
-    <div class="shape shape-2">
-      <div class="shape-icon">🔥</div>
-    </div>
-    <div class="shape shape-3">
-      <div class="shape-icon">❄️</div>
-    </div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-tag">Prefabricated Wellness Living</div>
-    <h1>Built to deliver.<br><em>Designed</em> to inspire.</h1>
-    <p class="hero-sub">Premium Engineering of Pre-Fabricated homes, gyms, saunas, and cold plunge experiences — precision-engineered and delivered ready to transform your space.</p>
-    <div class="hero-actions">
-      <a href="#products" class="btn-primary">Explore Range</a>
-      <a href="#about" class="btn-secondary">Our Process</a>
-    </div>
-  </div>
-</section>
+    <nav class="site-nav" id="site-nav" data-nav>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact" class="nav-cta">Start a project</a>
+    </nav>
+  </header>
 
-<!-- MARQUEE -->
-<div class="marquee-section">
-  <div class="marquee-track">
-    <div class="marquee-item"><span class="dot"></span>Prefab Houses</div>
-    <div class="marquee-item"><span class="dot"></span>Home Gyms</div>
-    <div class="marquee-item"><span class="dot"></span>Barrel Saunas</div>
-    <div class="marquee-item"><span class="dot"></span>Hot Tubs</div>
-    <div class="marquee-item"><span class="dot"></span>Ice Baths</div>
-    <div class="marquee-item"><span class="dot"></span>Custom Builds</div>
-    <div class="marquee-item"><span class="dot"></span>Turn-Key Delivery</div>
-    <div class="marquee-item"><span class="dot"></span>Premium Materials</div>
-    <div class="marquee-item"><span class="dot"></span>Prefab Houses</div>
-    <div class="marquee-item"><span class="dot"></span>Home Gyms</div>
-    <div class="marquee-item"><span class="dot"></span>Barrel Saunas</div>
-    <div class="marquee-item"><span class="dot"></span>Hot Tubs</div>
-    <div class="marquee-item"><span class="dot"></span>Ice Baths</div>
-    <div class="marquee-item"><span class="dot"></span>Custom Builds</div>
-    <div class="marquee-item"><span class="dot"></span>Turn-Key Delivery</div>
-    <div class="marquee-item"><span class="dot"></span>Premium Materials</div>
-  </div>
-</div>
-
-<!-- PRODUCTS -->
-<section class="products" id="products">
-  <div class="section-header reveal">
-    <h2>Our <em>Collection</em></h2>
-    <p>Every Spring structure is precision-built off-site and delivered ready. No mess, no delays, no compromise.</p>
-  </div>
-  <div class="products-grid">
-    <div class="product-card card-houses reveal">
-      <div class="product-card-bg"></div>
-      <div class="product-card-illustration">
-        <svg viewBox="0 0 400 540" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sky-h" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#2D3B35"/>
-              <stop offset="40%" stop-color="#3D5A4E"/>
-              <stop offset="100%" stop-color="#5A7A6A"/>
-            </linearGradient>
-            <linearGradient id="ground-h" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#3D5A4E"/>
-              <stop offset="100%" stop-color="#2A3E34"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="540" fill="url(#sky-h)"/>
-          <!-- Stars -->
-          <circle cx="50" cy="60" r="1.2" fill="rgba(255,255,255,0.4)"/>
-          <circle cx="150" cy="40" r="1" fill="rgba(255,255,255,0.3)"/>
-          <circle cx="280" cy="80" r="1.5" fill="rgba(255,255,255,0.35)"/>
-          <circle cx="340" cy="50" r="1" fill="rgba(255,255,255,0.25)"/>
-          <circle cx="100" cy="100" r="0.8" fill="rgba(255,255,255,0.3)"/>
-          <circle cx="220" cy="30" r="1.2" fill="rgba(255,255,255,0.3)"/>
-          <!-- Moon -->
-          <circle cx="320" cy="100" r="20" fill="rgba(255,255,255,0.08)"/>
-          <circle cx="320" cy="100" r="15" fill="rgba(255,255,255,0.05)"/>
-          <!-- Distant trees -->
-          <path d="M0,320 L20,260 L40,320 L60,250 L80,320 L100,265 L120,320 L140,255 L160,320 L180,258 L200,320 L220,262 L240,320 L260,250 L280,320 L300,258 L320,320 L340,255 L360,320 L380,260 L400,320 L400,340 L0,340Z" fill="rgba(30,50,40,0.6)"/>
-          <!-- Ground -->
-          <rect x="0" y="330" width="400" height="210" fill="url(#ground-h)"/>
-          <!-- Cabin body -->
-          <rect x="80" y="280" width="240" height="130" rx="2" fill="#1A1A18"/>
-          <!-- Roof -->
-          <polygon points="60,280 200,200 340,280" fill="#252520"/>
-          <line x1="60" y1="280" x2="200" y2="200" stroke="#333" stroke-width="1.5"/>
-          <line x1="200" y1="200" x2="340" y2="280" stroke="#333" stroke-width="1.5"/>
-          <!-- Chimney -->
-          <rect x="270" y="220" width="20" height="45" fill="#222"/>
-          <!-- Large window - warm glow -->
-          <rect x="110" y="300" width="80" height="90" rx="1" fill="#D4A66A" opacity="0.8"/>
-          <rect x="110" y="300" width="80" height="90" rx="1" fill="none" stroke="#333" stroke-width="2"/>
-          <line x1="150" y1="300" x2="150" y2="390" stroke="#444" stroke-width="1.5"/>
-          <line x1="110" y1="345" x2="190" y2="345" stroke="#444" stroke-width="1.5"/>
-          <!-- Warm light spill -->
-          <ellipse cx="150" cy="400" rx="60" ry="15" fill="#D4A66A" opacity="0.15"/>
-          <!-- Second window -->
-          <rect x="220" y="310" width="50" height="50" rx="1" fill="#C4925E" opacity="0.6"/>
-          <rect x="220" y="310" width="50" height="50" rx="1" fill="none" stroke="#333" stroke-width="2"/>
-          <line x1="245" y1="310" x2="245" y2="360" stroke="#444" stroke-width="1.5"/>
-          <!-- Door -->
-          <rect x="290" y="330" width="25" height="80" rx="1" fill="#2A2520"/>
-          <circle cx="310" cy="370" r="2" fill="#888"/>
-          <!-- Deck -->
-          <rect x="60" y="408" width="280" height="8" rx="1" fill="#2A2520"/>
-          <line x1="60" y1="410" x2="340" y2="410" stroke="#3A3530" stroke-width="0.5"/>
-          <!-- Pine trees left -->
-          <polygon points="25,410 35,300 45,410" fill="#1E3528"/>
-          <polygon points="30,380 35,320 40,380" fill="#243D30"/>
-          <rect x="33" y="405" width="4" height="20" fill="#1A2E22"/>
-          <!-- Pine trees right -->
-          <polygon points="355,410 370,280 385,410" fill="#1E3528"/>
-          <polygon points="360,370 370,300 380,370" fill="#243D30"/>
-          <rect x="368" y="405" width="4" height="25" fill="#1A2E22"/>
-          <!-- Foreground grass texture -->
-          <path d="M0,440 Q50,435 100,440 Q150,445 200,440 Q250,435 300,440 Q350,445 400,440 L400,540 L0,540Z" fill="rgba(25,40,30,0.5)"/>
-        </svg>
-      </div>
-      <div class="product-card-content">
-        <div class="product-card-number">01</div>
-        <div class="product-card-icon">🏠</div>
-        <h3>Houses</h3>
-        <p>Architecturally designed prefab homes from studio retreats to full family residences. Move-in ready.</p>
-        <a href="#contact" class="product-card-link">Request a Catalogue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-    </div>
-    <div class="product-card card-gyms reveal">
-      <div class="product-card-bg"></div>
-      <div class="product-card-illustration">
-        <svg viewBox="0 0 400 540" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="wall-g" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#4A3D30"/>
-              <stop offset="100%" stop-color="#3D3226"/>
-            </linearGradient>
-            <linearGradient id="floor-g" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#2A2218"/>
-              <stop offset="100%" stop-color="#1E1810"/>
-            </linearGradient>
-            <linearGradient id="light-beam" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="rgba(255,220,170,0.2)"/>
-              <stop offset="100%" stop-color="rgba(255,220,170,0)"/>
-            </linearGradient>
-          </defs>
-          <!-- Wall -->
-          <rect width="400" height="540" fill="url(#wall-g)"/>
-          <!-- Timber panelling lines -->
-          <line x1="0" y1="0" x2="0" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="50" y1="0" x2="50" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="100" y1="0" x2="100" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="150" y1="0" x2="150" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="200" y1="0" x2="200" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="250" y1="0" x2="250" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="300" y1="0" x2="300" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <line x1="350" y1="0" x2="350" y2="380" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-          <!-- Floor -->
-          <rect x="0" y="380" width="400" height="160" fill="url(#floor-g)"/>
-          <!-- Floor planks -->
-          <line x1="0" y1="400" x2="400" y2="400" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="0" y1="420" x2="400" y2="420" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="0" y1="440" x2="400" y2="440" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <!-- Window with light -->
-          <rect x="240" y="60" width="100" height="180" rx="2" fill="#6A8070" opacity="0.6"/>
-          <rect x="240" y="60" width="100" height="180" rx="2" fill="none" stroke="#5A6A58" stroke-width="3"/>
-          <line x1="290" y1="60" x2="290" y2="240" stroke="#5A6A58" stroke-width="2"/>
-          <line x1="240" y1="150" x2="340" y2="150" stroke="#5A6A58" stroke-width="2"/>
-          <!-- Light beam from window -->
-          <polygon points="240,240 340,240 400,380 180,380" fill="url(#light-beam)"/>
-          <!-- Exposed roof beams -->
-          <line x1="0" y1="25" x2="400" y2="25" stroke="#5A4A38" stroke-width="8"/>
-          <line x1="80" y1="25" x2="80" y2="0" stroke="#5A4A38" stroke-width="6"/>
-          <line x1="200" y1="25" x2="200" y2="0" stroke="#5A4A38" stroke-width="6"/>
-          <line x1="320" y1="25" x2="320" y2="0" stroke="#5A4A38" stroke-width="6"/>
-          <!-- Barbell rack -->
-          <rect x="30" y="180" width="8" height="200" rx="2" fill="#333"/>
-          <rect x="80" y="180" width="8" height="200" rx="2" fill="#333"/>
-          <rect x="26" y="200" width="66" height="6" rx="2" fill="#444"/>
-          <rect x="26" y="250" width="66" height="6" rx="2" fill="#444"/>
-          <!-- Barbell on rack -->
-          <rect x="10" y="246" width="98" height="5" rx="2" fill="#555"/>
-          <rect x="10" y="242" width="16" height="14" rx="3" fill="#444"/>
-          <rect x="92" y="242" width="16" height="14" rx="3" fill="#444"/>
-          <!-- Kettlebell -->
-          <circle cx="160" cy="395" r="18" fill="#3A3530"/>
-          <circle cx="160" cy="395" r="14" fill="#333028"/>
-          <path d="M152,380 Q148,370 152,362 L168,362 Q172,370 168,380" fill="none" stroke="#3A3530" stroke-width="4" stroke-linecap="round"/>
-          <!-- Pull-up bar -->
-          <rect x="140" y="30" width="6" height="100" fill="#444"/>
-          <rect x="170" y="30" width="6" height="100" fill="#444"/>
-          <rect x="136" y="30" width="44" height="6" rx="3" fill="#555"/>
-          <!-- Hanging rings -->
-          <line x1="148" y1="36" x2="148" y2="80" stroke="#666" stroke-width="1.5"/>
-          <line x1="168" y1="36" x2="168" y2="80" stroke="#666" stroke-width="1.5"/>
-          <circle cx="148" cy="86" r="8" fill="none" stroke="#666" stroke-width="2"/>
-          <circle cx="168" cy="86" r="8" fill="none" stroke="#666" stroke-width="2"/>
-          <!-- Bench -->
-          <rect x="200" y="370" width="100" height="12" rx="3" fill="#4A3D30"/>
-          <rect x="210" y="382" width="8" height="30" fill="#3A3020"/>
-          <rect x="282" y="382" width="8" height="30" fill="#3A3020"/>
-        </svg>
-      </div>
-      <div class="product-card-content">
-        <div class="product-card-number">02</div>
-        <div class="product-card-icon">💪</div>
-        <h3>Gyms</h3>
-        <p>Purpose-built training spaces with ventilation, rubber flooring and power — ready for serious workouts.</p>
-        <a href="#contact" class="product-card-link">Request a Catalogue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-    </div>
-    <div class="product-card card-saunas coming-soon reveal">
-      <div class="product-card-bg"></div>
-      <div class="product-card-illustration">
-        <svg viewBox="0 0 400 540" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sauna-wall" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#8B6040"/>
-              <stop offset="100%" stop-color="#5A3D25"/>
-            </linearGradient>
-            <radialGradient id="sauna-glow" cx="0.3" cy="0.7" r="0.6">
-              <stop offset="0%" stop-color="rgba(255,160,60,0.25)"/>
-              <stop offset="100%" stop-color="rgba(255,100,30,0)"/>
-            </radialGradient>
-            <linearGradient id="steam1" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
-              <stop offset="50%" stop-color="rgba(255,255,255,0.06)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </linearGradient>
-          </defs>
-          <!-- Cedar wall -->
-          <rect width="400" height="540" fill="url(#sauna-wall)"/>
-          <!-- Horizontal timber slats -->
-          <line x1="0" y1="30" x2="400" y2="30" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="90" x2="400" y2="90" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="120" x2="400" y2="120" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="150" x2="400" y2="150" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="180" x2="400" y2="180" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="210" x2="400" y2="210" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <line x1="0" y1="240" x2="400" y2="240" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
-          <!-- Warm glow -->
-          <rect width="400" height="540" fill="url(#sauna-glow)"/>
-          <!-- Upper bench -->
-          <rect x="0" y="250" width="400" height="18" rx="2" fill="#6B4828"/>
-          <rect x="0" y="250" width="400" height="4" fill="#7A5530"/>
-          <!-- Bench slats -->
-          <line x1="0" y1="253" x2="400" y2="253" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
-          <line x1="0" y1="258" x2="400" y2="258" stroke="rgba(0,0,0,0.1)" stroke-width="0.5"/>
-          <!-- Bench support -->
-          <rect x="50" y="268" width="8" height="72" fill="#5A3D25"/>
-          <rect x="200" y="268" width="8" height="72" fill="#5A3D25"/>
-          <rect x="340" y="268" width="8" height="72" fill="#5A3D25"/>
-          <!-- Lower bench -->
-          <rect x="0" y="340" width="400" height="18" rx="2" fill="#6B4828"/>
-          <rect x="0" y="340" width="400" height="4" fill="#7A5530"/>
-          <!-- Lower bench support -->
-          <rect x="50" y="358" width="8" height="72" fill="#5A3D25"/>
-          <rect x="200" y="358" width="8" height="72" fill="#5A3D25"/>
-          <rect x="340" y="358" width="8" height="72" fill="#5A3D25"/>
-          <!-- Floor -->
-          <rect x="0" y="430" width="400" height="110" fill="#3D2818"/>
-          <!-- Sauna heater -->
-          <rect x="300" y="350" width="60" height="80" rx="4" fill="#444"/>
-          <rect x="305" y="355" width="50" height="70" rx="3" fill="#333"/>
-          <!-- Hot stones -->
-          <ellipse cx="320" cy="355" rx="8" ry="5" fill="#666"/>
-          <ellipse cx="335" cy="358" rx="7" ry="5" fill="#5A5A5A"/>
-          <ellipse cx="328" cy="352" rx="6" ry="4" fill="#707070"/>
-          <!-- Heater glow -->
-          <ellipse cx="330" cy="400" rx="40" ry="20" fill="rgba(255,120,40,0.1)"/>
-          <!-- Steam wisps -->
-          <path d="M310,340 Q305,320 315,300 Q325,280 310,260" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
-          <path d="M335,345 Q340,318 330,290 Q320,265 338,240" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6" stroke-linecap="round"/>
-          <path d="M320,335 Q312,305 325,275 Q338,245 322,220" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="10" stroke-linecap="round"/>
-          <!-- Bucket and ladle -->
-          <rect x="30" y="395" width="28" height="32" rx="3" fill="#5A4530"/>
-          <rect x="28" y="392" width="32" height="5" rx="2" fill="#6B5640"/>
-          <line x1="44" y1="385" x2="44" y2="360" stroke="#6B5640" stroke-width="3" stroke-linecap="round"/>
-          <!-- Ladle -->
-          <line x1="65" y1="400" x2="100" y2="340" stroke="#6B5640" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="100" cy="336" r="10" fill="none" stroke="#6B5640" stroke-width="2.5"/>
-        </svg>
-      </div>
-      <div class="product-card-content">
-        <div class="product-card-number">03</div>
-        <div class="product-card-icon">🔥</div>
-        <div class="coming-soon-badge">Coming Soon</div>
-        <h3>Saunas</h3>
-        <p>Traditional and infrared saunas crafted from sustainably sourced timber. Drop in place, plug in, unwind.</p>
-        <a href="#contact" class="product-card-link">Register Interest <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-    </div>
-    <div class="product-card card-baths coming-soon reveal">
-      <div class="product-card-bg"></div>
-      <div class="product-card-illustration">
-        <svg viewBox="0 0 400 540" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="sky-b" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1A2E3A"/>
-              <stop offset="100%" stop-color="#2A4A5A"/>
-            </linearGradient>
-            <radialGradient id="water-glow" cx="0.5" cy="0.6" r="0.4">
-              <stop offset="0%" stop-color="rgba(100,180,200,0.2)"/>
-              <stop offset="100%" stop-color="rgba(60,120,140,0)"/>
-            </radialGradient>
-            <linearGradient id="deck-b" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#4A3D30"/>
-              <stop offset="100%" stop-color="#3A2E22"/>
-            </linearGradient>
-          </defs>
-          <!-- Sky -->
-          <rect width="400" height="540" fill="url(#sky-b)"/>
-          <!-- Stars -->
-          <circle cx="60" cy="40" r="1" fill="rgba(255,255,255,0.3)"/>
-          <circle cx="180" cy="70" r="1.2" fill="rgba(255,255,255,0.25)"/>
-          <circle cx="300" cy="30" r="0.8" fill="rgba(255,255,255,0.35)"/>
-          <circle cx="350" cy="90" r="1" fill="rgba(255,255,255,0.2)"/>
-          <circle cx="120" cy="55" r="1.3" fill="rgba(255,255,255,0.3)"/>
-          <!-- Mountain silhouette -->
-          <polygon points="0,200 80,130 160,170 250,110 330,160 400,140 400,250 0,250" fill="rgba(15,25,35,0.5)"/>
-          <!-- Treeline -->
-          <path d="M0,240 L15,210 L30,240 L50,205 L70,240 L85,215 L100,240 L120,200 L140,240 L155,218 L170,240 L190,208 L210,240 L225,215 L240,240 L260,205 L280,240 L300,210 L320,240 L340,215 L360,240 L380,208 L400,240 L400,260 L0,260Z" fill="rgba(20,35,28,0.7)"/>
-          <!-- Timber deck -->
-          <rect x="0" y="250" width="400" height="290" fill="url(#deck-b)"/>
-          <!-- Deck plank lines -->
-          <line x1="0" y1="268" x2="400" y2="268" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="0" y1="286" x2="400" y2="286" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="0" y1="304" x2="400" y2="304" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <line x1="0" y1="322" x2="400" y2="322" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
-          <!-- Plunge tub - elliptical, sunken into deck -->
-          <ellipse cx="200" cy="380" rx="110" ry="60" fill="#1A3545"/>
-          <ellipse cx="200" cy="380" rx="110" ry="60" fill="none" stroke="#5A4A38" stroke-width="6"/>
-          <ellipse cx="200" cy="380" rx="105" ry="56" fill="none" stroke="#4A3D30" stroke-width="2"/>
-          <!-- Water surface -->
-          <ellipse cx="200" cy="382" rx="100" ry="50" fill="#1E4050"/>
-          <ellipse cx="200" cy="382" rx="100" ry="50" fill="url(#water-glow)"/>
-          <!-- Water ripples -->
-          <ellipse cx="200" cy="378" rx="70" ry="30" fill="none" stroke="rgba(120,200,220,0.1)" stroke-width="1"/>
-          <ellipse cx="200" cy="382" rx="50" ry="22" fill="none" stroke="rgba(120,200,220,0.08)" stroke-width="1"/>
-          <ellipse cx="200" cy="386" rx="30" ry="14" fill="none" stroke="rgba(120,200,220,0.06)" stroke-width="1"/>
-          <!-- Water shimmer highlights -->
-          <line x1="160" y1="375" x2="175" y2="375" stroke="rgba(150,210,230,0.12)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="210" y1="380" x2="230" y2="380" stroke="rgba(150,210,230,0.1)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="185" y1="388" x2="195" y2="388" stroke="rgba(150,210,230,0.08)" stroke-width="1" stroke-linecap="round"/>
-          <!-- Steps -->
-          <rect x="265" y="355" width="40" height="8" rx="2" fill="#5A4A38"/>
-          <rect x="270" y="365" width="35" height="8" rx="2" fill="#4A3D30"/>
-          <!-- Towel rolled on deck -->
-          <rect x="40" y="310" width="50" height="14" rx="7" fill="#E8E0D0" opacity="0.5"/>
-          <!-- Steam wisps above water -->
-          <path d="M170,350 Q165,335 175,320" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5" stroke-linecap="round"/>
-          <path d="M220,345 Q225,328 218,312" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="product-card-content">
-        <div class="product-card-number">04</div>
-        <div class="product-card-icon">❄️</div>
-        <div class="coming-soon-badge">Coming Soon</div>
-        <h3>Hot Tubs & Ice Baths</h3>
-        <p>Contrast therapy at home. Premium hot tubs and cold plunge pools engineered for daily recovery.</p>
-        <a href="#contact" class="product-card-link">Register Interest <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT / PROCESS -->
-<section class="about" id="about">
-  <div class="about-inner">
-    <div class="about-visual reveal">
-      <div class="about-block about-block-1">
-        <div class="about-block-1-inner">
-          <div class="big-num">14</div>
-          <p>Day Lead Time</p>
-        </div>
-      </div>
-      <div class="about-block about-block-2">
-        <div class="about-block-2-inner">
-          <div class="big-num">97%</div>
-          <p>Built Off-Site</p>
-        </div>
-      </div>
-    </div>
-    <div class="about-text reveal">
-      <h2>From <em>concept</em> to your backyard in weeks</h2>
-      <p>Traditional builds take months and create chaos. Spring structures are precision-manufactured in our facility and delivered as complete, ready-to-use spaces. Less waste, faster timelines, exceptional quality.</p>
-      <div class="process-steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text">
-            <h4>Design & Configure</h4>
-            <p>Choose your structure, customise the layout, finishes and features to suit your lifestyle.</p>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Prefab homes · decks · structural outdoor builds</p>
+          <h1>Engineering-led building systems, designed to go up faster and last longer.</h1>
+          <p class="hero-lede">
+            Spring helps homeowners, builders and architects create smart prefab houses,
+            decks, studios and site-ready structures with less waste, clearer pricing
+            and better buildability from day one.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="mailto:hello@spring.net.au?subject=Project%20enquiry%20for%20Spring">Email an enquiry</a>
+            <a class="button ghost" href="#services">Explore services</a>
+          </div>
+          <div class="hero-proof">
+            <span>Engineered packages</span>
+            <span>Prefab-ready details</span>
+            <span>Buildability first</span>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text">
-            <h4>Precision Manufacture</h4>
-            <p>Your structure is built in our controlled facility — no weather delays, no site mess.</p>
+
+        <div class="hero-card" aria-label="Project summary card">
+          <div class="card-top">
+            <span class="status-dot"></span>
+            <span>Spring project model</span>
           </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text">
-            <h4>Deliver & Install</h4>
-            <p>We transport and crane your finished structure into place. You're ready to use it that day.</p>
+          <div class="model-lines">
+            <span style="--w:72%"></span>
+            <span style="--w:54%"></span>
+            <span style="--w:88%"></span>
+            <span style="--w:63%"></span>
+          </div>
+          <div class="metric-row">
+            <div>
+              <strong>01</strong>
+              <small>Design brief</small>
+            </div>
+            <div>
+              <strong>02</strong>
+              <small>Engineering</small>
+            </div>
+            <div>
+              <strong>03</strong>
+              <small>Prefab pack</small>
+            </div>
+          </div>
+          <div class="site-panel">
+            <span>Site-ready output</span>
+            <b>Drawings · quantities · installation logic</b>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-header reveal">
-    <h2>Why choose <em>Spring</em></h2>
-    <p>Built different, by design. Every detail is considered from materials to the moment it arrives.</p>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card reveal">
-      <div class="feature-icon">⚡</div>
-      <h3>Rapid Delivery</h3>
-      <p>From order to installation in as little as 14 days. No months of waiting, no construction site chaos in your backyard.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🌿</div>
-      <h3>Sustainable Build</h3>
-      <p>Factory-controlled manufacturing means 60% less waste than traditional builds. Responsibly sourced timber and materials throughout.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🧊</div>
-      <h3>All-Weather Ready</h3>
-      <p>Engineered for Australian conditions with premium insulation, weather sealing and UV-resistant finishes as standard.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🔧</div>
-      <h3>Turn-Key Install</h3>
-      <p>We handle everything — transport, crane, placement and connection. Walk in and start using your space from day one.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">📐</div>
-      <h3>Fully Customisable</h3>
-      <p>Every structure can be tailored — layouts, finishes, fixtures and features designed around how you actually live and train.</p>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-icon">🛡️</div>
-      <h3>10-Year Warranty</h3>
-      <p>We stand behind every build with a comprehensive 10-year structural warranty and ongoing aftercare support.</p>
-    </div>
-  </div>
-</section>
+    <section class="section intro">
+      <div class="container split">
+        <div>
+          <p class="eyebrow">What we do</p>
+          <h2>Structures that make sense before anyone picks up a tool.</h2>
+        </div>
+        <p>
+          A good build is won early: in the structural logic, the material choices,
+          the junctions, the sequencing and the details that keep site work clean.
+          Spring brings engineering discipline to residential and outdoor construction.
+        </p>
+      </div>
+    </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="testimonials-inner">
-    <div class="reveal">
-      <h2>What our <em>customers</em> say</h2>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card reveal">
-        <div class="testimonial-stars">★★★★★</div>
-        <blockquote>"We had our Spring home studio delivered on a Monday morning. By lunchtime it was craned in, connected, and I was working in it that afternoon. Unreal."</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">JM</div>
-          <div class="testimonial-author-info">
-            <div class="name">James M.</div>
-            <div class="role">Prefab House — Melbourne</div>
+    <section class="section services" id="services">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Services</p>
+          <h2>From concept to install-ready package.</h2>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card">
+            <span class="service-icon">⌂</span>
+            <h3>Prefab homes & studios</h3>
+            <p>Compact dwellings, cabins, backyard studios and modular additions designed around efficient fabrication and fast assembly.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-icon">▤</span>
+            <h3>Decks & outdoor living</h3>
+            <p>Deck structures, pergolas, shade systems, steps, balustrade planning and outdoor rooms designed for real site conditions.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-icon">⌁</span>
+            <h3>Site engineering</h3>
+            <p>Practical engineering input for footings, posts, spans, bracing, drainage, soil movement and build sequencing.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-icon">◫</span>
+            <h3>Builder documentation</h3>
+            <p>Clear drawings, schedules, quantities and detail packs that help trades price, order and build with fewer surprises.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process" id="process">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Process</p>
+          <h2>A simple path from idea to buildable structure.</h2>
+        </div>
+
+        <div class="timeline">
+          <article>
+            <span>1</span>
+            <h3>Brief</h3>
+            <p>We clarify the site, use, constraints, budget range and the outcome you want.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Design logic</h3>
+            <p>We map the structure, spans, materials, access and construction sequence.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Engineering pack</h3>
+            <p>You receive clear documentation for pricing, approvals, fabrication and site work.</p>
+          </article>
+          <article>
+            <span>4</span>
+            <h3>Build support</h3>
+            <p>We help resolve details before and during the build so the project keeps moving.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section projects" id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Example project types</p>
+          <h2>Built for practical Australian sites.</h2>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card">
+            <div class="project-image image-one"></div>
+            <div>
+              <h3>Rural prefab retreat</h3>
+              <p>Low-impact cabin design with repeatable structural bays and simple site installation.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-image image-two"></div>
+            <div>
+              <h3>Large timber deck</h3>
+              <p>Outdoor living platforms designed around views, access, weathering and long-term durability.</p>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-image image-three"></div>
+            <div>
+              <h3>Backyard studio</h3>
+              <p>A compact, engineered work or guest space with clean junctions and prefabrication potential.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section values">
+      <div class="container value-grid">
+        <div>
+          <p class="eyebrow">Why Spring</p>
+          <h2>Less guesswork. Better decisions. Cleaner builds.</h2>
+        </div>
+        <div class="value-list">
+          <div>
+            <h3>Engineer early</h3>
+            <p>Resolve the structure before the design becomes expensive to change.</p>
+          </div>
+          <div>
+            <h3>Design for assembly</h3>
+            <p>Every detail should help the project move faster on site.</p>
+          </div>
+          <div>
+            <h3>Document clearly</h3>
+            <p>Builders, fabricators and clients should all know exactly what is being delivered.</p>
           </div>
         </div>
       </div>
-      <div class="testimonial-card reveal">
-        <div class="testimonial-stars">★★★★★</div>
-        <blockquote>"The sauna quality blew us away. Solid cedar, proper heater, beautiful craftsmanship. Our friends are all ordering one now."</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">SL</div>
-          <div class="testimonial-author-info">
-            <div class="name">Sarah L.</div>
-            <div class="role">Barrel Sauna — Sydney</div>
-          </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container contact-card">
+        <div>
+          <p class="eyebrow">Start your project</p>
+          <h2>Have a prefab house, deck or outdoor structure in mind?</h2>
+          <p>Send through your site address, a rough scope, drawings or sketches if you have them, and what you want the structure to achieve.</p>
         </div>
+        <a class="button primary large" href="mailto:hello@spring.net.au?subject=Project%20enquiry%20for%20Spring&body=Hi%20Spring%2C%0A%0AI%27d%20like%20to%20discuss%20a%20project.%0A%0AProject%20type%3A%0ASite%20address%3A%0ATiming%3A%0ABudget%20range%3A%0A%0AThanks%2C">
+          hello@spring.net.au
+        </a>
       </div>
-      <div class="testimonial-card reveal">
-        <div class="testimonial-stars">★★★★★</div>
-        <blockquote>"Having a gym and ice bath 10 steps from my back door changed my routine completely. The build quality is commercial grade."</blockquote>
-        <div class="testimonial-author">
-          <div class="testimonial-avatar">TP</div>
-          <div class="testimonial-author-info">
-            <div class="name">Tom P.</div>
-            <div class="role">Gym + Ice Bath — Brisbane</div>
-          </div>
-        </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="#top" aria-label="Spring home">
+          <span class="brand-mark">S</span>
+          <span class="brand-text">Spring</span>
+        </a>
+        <p>Engineering-led prefab houses, decks and outdoor structures.</p>
+      </div>
+      <div>
+        <strong>Contact</strong>
+        <a href="mailto:hello@spring.net.au">hello@spring.net.au</a>
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CTA -->
-<section class="cta" id="contact">
-  <div class="cta-inner reveal">
-    <h2>Ready to build<br>your <em>Spring</em>?</h2>
-    <p>Tell us what you're dreaming of and we'll put together a custom proposal. No obligations, just possibilities.</p>
-    <div class="cta-actions">
-      <a href="tel:1300672499" class="btn-primary">Call 1300 672 499</a>
-      <a href="mailto:david@spring.net.au" class="btn-secondary">Email Us</a>
-    </div>
-    <div style="margin-top: 1.5rem; color: var(--stone); font-size: 0.9rem;">
-      <a href="mailto:david@spring.net.au" style="color: var(--forest); text-decoration: none; font-weight: 500;">david@spring.net.au</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="#" class="logo">spring<span>.</span></a>
-        <p>Premium prefabricated structures — houses, gyms, saunas and wellness spaces — delivered to your door.</p>
-        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-          <a href="tel:1300672499" style="color: var(--sage); text-decoration: none; font-size: 0.95rem; font-weight: 500;">1300 672 499</a>
-          <a href="mailto:david@spring.net.au" style="color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem;">david@spring.net.au</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Products</h4>
-        <ul>
-          <li><a href="#">Prefab Houses</a></li>
-          <li><a href="#">Home Gyms</a></li>
-          <li><a href="#">Saunas</a></li>
-          <li><a href="#">Hot Tubs</a></li>
-          <li><a href="#">Ice Baths</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Our Process</a></li>
-          <li><a href="#">Sustainability</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <ul>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Delivery Info</a></li>
-          <li><a href="#">Warranty</a></li>
-          <li><a href="#">Installation</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 Spring. All rights reserved.</span>
-      <div class="footer-social">
-        <a href="#">IG</a>
-        <a href="#">FB</a>
-        <a href="#">YT</a>
-        <a href="#">LI</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script>
-  // Nav scroll effect
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 50);
-  });
-
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, i * 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
