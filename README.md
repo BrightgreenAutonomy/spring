@@ -5,7 +5,7 @@ Plain HTML/CSS/JS one-page site for www.spring.net.au. No build step. GitHub Pag
 ## Files
 
 - `index.html`: page content, CSS and JS
-- `images/`: the 21 photos (.webp)
+- `images/`: the 21 photos (.webp), plus `logo.png` and `icon.png`
 
 ## Things to know
 
@@ -14,7 +14,13 @@ Plain HTML/CSS/JS one-page site for www.spring.net.au. No build step. GitHub Pag
 - **Animations:** sections fade in on scroll. Users with "reduce motion" switched on get no animation.
 - **Responsive:** tested at 375 px (phone), 1024 px and desktop widths. There's no horizontal scrolling.
 - **Accessibility:** every photo has alt text and the mobile menu has ARIA attributes.
-- **SEO:** title, meta description and Open Graph tags are set in `<head>`. Consider adding an `og:image` (e.g. `images/hero.webp` as an absolute URL), a favicon and Google Analytics/Tag Manager if you use them.
+- **SEO:** title, meta description and Open Graph tags are set in `<head>`. Consider adding an `og:image` (e.g. `images/hero.webp` as an absolute URL) and Google Analytics/Tag Manager if you use them.
+
+## Logo
+
+- `images/logo.png` is the Spring Engineering logo, used in the header and footer. `images/icon.png` is the hexagon mark only, used as the favicon and Apple touch icon.
+- The supplied logo is dark artwork on a **white background** (it isn't transparent). To make it sit cleanly on the page, CSS uses `mix-blend-mode: multiply` in the light header and `filter: invert(1); mix-blend-mode: screen` in the dark footer, so the white disappears in both places.
+- If the client has a transparent PNG or an SVG version, swap it in and remove those two CSS rules (`.brand-logo` and `.footer-brand .brand-logo`). For the footer you'd then want a white version of the logo.
 
 ## Content to confirm with the client before launch
 
