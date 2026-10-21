@@ -4,9 +4,537 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Spring Engineering — Prefab Homes, Decks & Built Structures</title>
-  <meta name="description" content="Spring designs and delivers engineered prefab homes, decks, extensions and outdoor structures across Australia." />
+  <meta name="description" content="Spring designs and engineers prefab homes, backyard studios, decks, pergolas and outdoor structures across Australia — with clear documentation builders can price and build from." />
   <meta name="theme-color" content="#0f2f2e" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta property="og:title" content="Spring Engineering — Prefab Homes, Decks & Built Structures" />
+  <meta property="og:description" content="Engineering-led prefab homes, studios, decks and outdoor structures across Australia." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.spring.net.au/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #092421;
+      --muted: #52605d;
+      --paper: #f6f2e8;
+      --surface: #fffaf0;
+      --line: rgba(9, 36, 33, 0.14);
+      --spring: #b8e986;
+      --spring-dark: #0f2f2e;
+      --spring-mid: #315a51;
+      --accent: #e8b55f;
+      --shadow: 0 24px 80px rgba(15, 47, 46, 0.16);
+      --radius: 28px;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 24px;
+      font-size: clamp(2.8rem, 6.4vw, 6.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+    h2 {
+      margin-bottom: 18px;
+      font-size: clamp(2rem, 4vw, 3.9rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+    h3 { margin-bottom: 10px; font-size: 1.3rem; letter-spacing: -0.03em; line-height: 1.15; }
+    .container { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .eyebrow {
+      margin: 0 0 14px;
+      color: #42705f;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+    }
+    .lede { color: var(--muted); font-size: clamp(1.05rem, 1.6vw, 1.22rem); max-width: 640px; }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      inset: 16px 0 auto 0;
+      z-index: 20;
+      width: min(var(--max), calc(100% - 32px));
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 999px;
+      background: rgba(246, 242, 232, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 12px 42px rgba(15, 47, 46, 0.10);
+      transition: background 220ms ease;
+    }
+    .site-header.is-scrolled { background: rgba(246, 242, 232, 0.95); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.04em; }
+    .brand-mark {
+      display: grid; place-items: center;
+      width: 38px; height: 38px; border-radius: 50%;
+      color: var(--spring-dark);
+      background: linear-gradient(145deg, var(--spring), #f4ffb7);
+      box-shadow: inset 0 -8px 12px rgba(15, 47, 46, 0.08);
+    }
+    .brand-text { font-size: 1.15rem; }
+    .site-nav { display: flex; align-items: center; gap: 2px; }
+    .site-nav a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: rgba(9, 36, 33, 0.82);
+      font-weight: 650;
+      font-size: 0.93rem;
+    }
+    .site-nav a:hover { background: rgba(15, 47, 46, 0.08); }
+    .site-nav .nav-cta { background: var(--spring-dark); color: #fff; margin-left: 6px; }
+    .site-nav .nav-cta:hover { background: var(--spring-mid); }
+    .menu-toggle {
+      display: none;
+      width: 44px; height: 44px;
+      border: 0; border-radius: 50%;
+      background: var(--spring-dark);
+      cursor: pointer;
+      padding: 0;
+      place-items: center;
+      align-content: center;
+      gap: 4px;
+    }
+    .menu-toggle span:not(.sr-only) { display: block; width: 18px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* Buttons */
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 50px; padding: 0 22px;
+      border-radius: 999px;
+      font-weight: 800; font-size: 0.98rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button.primary { color: #fff; background: var(--spring-dark); box-shadow: 0 16px 34px rgba(15, 47, 46, 0.24); }
+    .button.lime { color: var(--spring-dark); background: var(--spring); }
+    .button.ghost { border-color: rgba(9, 36, 33, 0.22); background: rgba(255, 255, 255, 0.4); }
+    .button.ghost-light { border-color: rgba(255,255,255,0.4); color: #fff; background: rgba(255,255,255,0.08); }
+    .button.large { min-height: 60px; padding-inline: 28px; font-size: 1.05rem; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 140px 0 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(184, 233, 134, 0.65), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(232, 181, 95, 0.40), transparent 26%),
+        linear-gradient(135deg, #f6f2e8 0%, #e8ead8 55%, #d9e7d0 100%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+      gap: 56px;
+      align-items: center;
+      padding-bottom: 80px;
+    }
+    .hero-actions, .hero-proof { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-actions { margin-top: 32px; }
+    .hero-proof { margin-top: 28px; color: #365550; font-weight: 700; font-size: 0.9rem; }
+    .hero-proof span {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid rgba(9, 36, 33, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.42);
+    }
+    .hero-proof span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #41af67; }
+    .hero-visual { position: relative; }
+    .hero-photo {
+      border-radius: 38px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 4 / 4.6;
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-float {
+      position: absolute;
+      background: rgba(255, 250, 240, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 22px;
+      padding: 16px 18px;
+      box-shadow: 0 18px 50px rgba(15, 47, 46, 0.18);
+    }
+    .hero-float.one { left: -36px; bottom: 54px; max-width: 250px; }
+    .hero-float.two { right: -20px; top: 36px; }
+    .hero-float small { display: block; color: var(--muted); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hero-float strong { display: block; font-size: 1.02rem; letter-spacing: -0.02em; line-height: 1.3; margin-top: 4px; }
+    .float-steps { display: flex; gap: 6px; margin-top: 10px; }
+    .float-steps i { flex: 1; height: 6px; border-radius: 6px; background: var(--spring); }
+    .float-steps i:last-child { background: rgba(15,47,46,0.15); }
+
+    /* Ribbon */
+    .ribbon { background: var(--spring-dark); color: #e8f3dd; }
+    .ribbon-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .ribbon-grid div { padding: 30px 26px; border-left: 1px solid rgba(255,255,255,0.1); }
+    .ribbon-grid div:first-child { border-left: 0; padding-left: 0; }
+    .ribbon-grid b { display: block; color: var(--spring); font-size: 1.05rem; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .ribbon-grid span { font-size: 0.92rem; color: rgba(232, 243, 221, 0.75); }
+
+    /* Sections */
+    .section { padding: 110px 0; }
+    .section-heading { max-width: 760px; margin-bottom: 54px; }
+    .section-heading.center { margin-inline: auto; text-align: center; }
+    .section-heading.center .lede { margin-inline: auto; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .intro-photos { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+    .intro-photos figure { margin: 0; border-radius: 24px; overflow: hidden; }
+    .intro-photos figure img { width: 100%; height: 100%; object-fit: cover; }
+    .intro-photos figure:first-child { grid-row: span 2; aspect-ratio: 3 / 4.2; }
+    .intro-photos figure:not(:first-child) { aspect-ratio: 4 / 3.3; }
+    .check-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }
+    .check-list li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; }
+    .check-list li::before {
+      content: "✓";
+      display: grid; place-items: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--spring); color: var(--spring-dark);
+      font-weight: 900; font-size: 0.85rem;
+    }
+    .check-list b { display: block; letter-spacing: -0.01em; }
+    .check-list span { color: var(--muted); font-size: 0.96rem; }
+
+    /* Services */
+    .services { background: var(--surface); border-block: 1px solid var(--line); }
+    .service-list { display: grid; gap: 28px; }
+    .service-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(15, 47, 46, 0.06);
+    }
+    .service-row:nth-child(even) .service-media { order: 2; }
+    .service-media { position: relative; min-height: 380px; }
+    .service-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .service-tag {
+      position: absolute; left: 20px; top: 20px;
+      padding: 7px 13px; border-radius: 999px;
+      background: rgba(255,250,240,0.92);
+      font-weight: 800; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .service-body { padding: 44px 46px; display: flex; flex-direction: column; justify-content: center; }
+    .service-body h3 { font-size: clamp(1.6rem, 2.4vw, 2.1rem); letter-spacing: -0.045em; }
+    .service-body > p { color: var(--muted); }
+    .feature-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px;
+      list-style: none; padding: 0; margin: 14px 0 22px;
+    }
+    .feature-grid li { position: relative; padding-left: 20px; font-size: 0.95rem; font-weight: 600; }
+    .feature-grid li::before {
+      content: ""; position: absolute; left: 0; top: 0.5em;
+      width: 9px; height: 9px; border-radius: 3px; background: #6bbf5a;
+    }
+    .ideal { font-size: 0.9rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; margin: 0 0 20px; }
+    .ideal b { color: var(--ink); }
+    .text-link { font-weight: 800; color: var(--spring-dark); display: inline-flex; gap: 8px; align-items: center; }
+    .text-link::after { content: "→"; transition: transform 160ms ease; }
+    .text-link:hover::after { transform: translateX(4px); }
+
+    /* Feature band */
+    .band {
+      position: relative;
+      color: #fff;
+      padding: 140px 0;
+      overflow: hidden;
+    }
+    .band > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .band::before {
+      content: ""; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(100deg, rgba(9,36,33,0.92) 0%, rgba(9,36,33,0.7) 45%, rgba(9,36,33,0.15) 100%);
+    }
+    .band .container { position: relative; z-index: 2; }
+    .band-copy { max-width: 600px; }
+    .band .eyebrow { color: var(--spring); }
+    .band p { color: rgba(255,255,255,0.82); font-size: 1.1rem; }
+    .band-stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+    .band-stats div {
+      padding: 16px 20px; border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .band-stats b { display: block; color: var(--spring); font-size: 1.05rem; }
+    .band-stats span { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+
+    /* Packages */
+    .package-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .package {
+      position: relative;
+      display: flex; flex-direction: column;
+      padding: 34px 30px;
+      border-radius: var(--radius);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .package.featured { background: var(--spring-dark); color: #fff; border-color: var(--spring-dark); box-shadow: var(--shadow); }
+    .package.featured .package-sub, .package.featured li { color: rgba(255,255,255,0.8); }
+    .package.featured li::before { color: var(--spring); }
+    .badge {
+      position: absolute; top: 22px; right: 22px;
+      padding: 6px 11px; border-radius: 999px;
+      background: var(--spring); color: var(--spring-dark);
+      font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .package-label { font-weight: 800; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: #42705f; }
+    .package.featured .package-label { color: var(--spring); }
+    .package h3 { font-size: 1.8rem; letter-spacing: -0.05em; margin: 10px 0 8px; }
+    .package-sub { color: var(--muted); font-size: 0.96rem; min-height: 3em; }
+    .package ul { list-style: none; padding: 0; margin: 18px 0 28px; display: grid; gap: 10px; flex: 1; }
+    .package li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; font-size: 0.95rem; color: var(--muted); }
+    .package li::before { content: "✓"; font-weight: 900; color: #3d9a52; }
+    .package .button { width: 100%; }
+    .packages-note { text-align: center; color: var(--muted); font-size: 0.92rem; margin-top: 26px; }
+
+    /* Process */
+    .process { background: var(--spring-dark); color: #fff; }
+    .process .eyebrow { color: var(--spring); }
+    .process .lede { color: rgba(255,255,255,0.72); }
+    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: step; }
+    .timeline article {
+      position: relative;
+      padding: 30px 26px 28px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .timeline .num {
+      display: grid; place-items: center;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--spring); color: var(--spring-dark);
+      font-weight: 900; margin-bottom: 22px;
+    }
+    .timeline p { color: rgba(255,255,255,0.72); font-size: 0.95rem; }
+    .timeline .deliver {
+      margin: 16px 0 0; padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.85rem; color: var(--spring); font-weight: 700;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 240px;
+      gap: 16px;
+    }
+    .gallery figure { position: relative; margin: 0; border-radius: 22px; overflow: hidden; }
+    .gallery figure img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms ease; }
+    .gallery figure:hover img { transform: scale(1.04); }
+    .gallery figcaption {
+      position: absolute; inset: auto 0 0 0;
+      padding: 40px 20px 18px;
+      color: #fff;
+      background: linear-gradient(180deg, transparent, rgba(9,36,33,0.85));
+    }
+    .gallery figcaption b { display: block; font-size: 1.05rem; letter-spacing: -0.02em; }
+    .gallery figcaption span { font-size: 0.86rem; color: rgba(255,255,255,0.8); }
+    .g-wide { grid-column: span 2; }
+    .g-tall { grid-row: span 2; }
+
+    /* Audience */
+    .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .audience {
+      border-radius: var(--radius); overflow: hidden;
+      background: #fff; border: 1px solid var(--line);
+      display: flex; flex-direction: column;
+    }
+    .audience img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+    .audience div { padding: 26px 26px 30px; }
+    .audience p { color: var(--muted); margin-bottom: 0; font-size: 0.97rem; }
+
+    /* Values */
+    .values { background: var(--surface); border-block: 1px solid var(--line); }
+    .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .value {
+      padding: 30px 28px; border-radius: 24px;
+      background: #fff; border: 1px solid var(--line);
+    }
+    .value-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: grid; place-items: center;
+      background: linear-gradient(145deg, var(--spring), #f4ffb7);
+      margin-bottom: 20px;
+    }
+    .value-icon svg { width: 26px; height: 26px; stroke: var(--spring-dark); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .value p { color: var(--muted); margin: 0; font-size: 0.97rem; }
+
+    /* Materials */
+    .materials { display: grid; grid-template-columns: 1.05fr 1fr; gap: 60px; align-items: center; }
+    .materials-photo { border-radius: 32px; overflow: hidden; aspect-ratio: 5 / 4; box-shadow: var(--shadow); }
+    .materials-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .chip { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-weight: 700; font-size: 0.9rem; }
+
+    /* FAQ */
+    .faq-wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; align-items: start; }
+    .faq details {
+      border-bottom: 1px solid var(--line);
+      padding: 22px 0;
+    }
+    .faq details:first-child { border-top: 1px solid var(--line); }
+    .faq summary {
+      cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; gap: 20px; align-items: center;
+      font-weight: 750; font-size: 1.08rem; letter-spacing: -0.02em;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+"; flex: none;
+      display: grid; place-items: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(15,47,46,0.07); font-size: 1.2rem; font-weight: 600;
+      transition: transform 200ms ease;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); background: var(--spring); }
+    .faq details p { margin: 14px 0 0; color: var(--muted); max-width: 640px; }
+
+    /* Contact */
+    .contact { padding: 40px 0 110px; }
+    .contact-card {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-radius: 36px; overflow: hidden;
+      background: var(--spring-dark); color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .contact-info { position: relative; padding: 56px 52px; overflow: hidden; }
+    .contact-info > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.22; }
+    .contact-info > * { position: relative; }
+    .contact-info .eyebrow { color: var(--spring); }
+    .contact-info p { color: rgba(255,255,255,0.8); }
+    .contact-points { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 12px; }
+    .contact-points li { display: flex; gap: 12px; align-items: center; color: rgba(255,255,255,0.85); font-size: 0.96rem; }
+    .contact-points li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--spring); flex: none; }
+    .contact-email { display: inline-block; margin-top: 30px; font-size: 1.3rem; font-weight: 800; color: var(--spring); border-bottom: 2px solid rgba(184,233,134,0.4); }
+    .enquiry { background: var(--surface); color: var(--ink); padding: 48px 46px; }
+    .enquiry h3 { font-size: 1.5rem; letter-spacing: -0.04em; }
+    .enquiry > p { color: var(--muted); font-size: 0.94rem; }
+    .field { display: grid; gap: 6px; margin-bottom: 14px; }
+    .field label { font-weight: 700; font-size: 0.86rem; }
+    .field input, .field select, .field textarea {
+      font: inherit; font-size: 0.97rem;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(9,36,33,0.2);
+      background: #fff; color: var(--ink);
+      width: 100%;
+    }
+    .field textarea { min-height: 110px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: 3px solid rgba(184,233,134,0.8); border-color: #6bbf5a; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .enquiry .button { width: 100%; margin-top: 6px; }
+    .form-note { font-size: 0.82rem; color: var(--muted); margin: 12px 0 0; text-align: center; }
+
+    /* Footer */
+    .site-footer { background: #071b19; color: rgba(255,255,255,0.72); padding: 64px 0 36px; font-size: 0.94rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+    .footer-grid strong { display: block; color: #fff; margin-bottom: 14px; }
+    .footer-grid a { display: block; margin-bottom: 8px; }
+    .footer-grid a:hover { color: var(--spring); }
+    .footer-brand { color: #fff; margin-bottom: 16px; }
+    .footer-bottom { margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 0.85rem; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms ease, transform 700ms ease; }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .button:hover { transform: none; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1020px) {
+      .hero-grid, .split, .materials, .faq-wrap { grid-template-columns: 1fr; gap: 44px; }
+      .hero-float.one { left: 16px; }
+      .hero-float.two { right: 16px; }
+      .hero-photo { aspect-ratio: 4 / 3; }
+      .service-row { grid-template-columns: 1fr; }
+      .service-row:nth-child(even) .service-media { order: 0; }
+      .service-media { min-height: 300px; }
+      .package-grid, .audience-grid, .value-grid { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; }
+      .timeline { grid-template-columns: 1fr 1fr; }
+      .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+      .contact-card { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .ribbon-grid { grid-template-columns: 1fr 1fr; }
+      .ribbon-grid div { padding: 22px 20px; border-left: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+      .ribbon-grid div:first-child { padding-left: 20px; }
+    }
+    @media (max-width: 820px) {
+      .menu-toggle { display: grid; }
+      .site-nav {
+        position: absolute; top: calc(100% + 10px); left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 4px;
+        padding: 12px;
+        border-radius: 24px;
+        background: rgba(246, 242, 232, 0.98);
+        box-shadow: var(--shadow);
+        display: none;
+      }
+      .site-nav.is-open { display: flex; }
+      .site-nav a { padding: 14px 16px; }
+      .site-nav .nav-cta { margin-left: 0; text-align: center; }
+    }
+    @media (max-width: 640px) {
+      .container { width: calc(100% - 32px); }
+      .section { padding: 76px 0; }
+      .hero { padding-top: 116px; }
+      .hero-grid { padding-bottom: 56px; }
+      .hero-float.two { display: none; }
+      .hero-float.one { left: 12px; bottom: 12px; right: 12px; max-width: none; }
+      .service-body { padding: 30px 24px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+      .g-wide, .g-tall { grid-column: auto; grid-row: auto; }
+      .field-row { grid-template-columns: 1fr; }
+      .contact-info, .enquiry { padding: 36px 24px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .ribbon-grid { grid-template-columns: 1fr; }
+      .band { padding: 96px 0; }
+      .intro-photos figure:first-child { aspect-ratio: 3 / 4.6; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header" data-header>
@@ -14,240 +542,654 @@
       <span class="brand-mark">S</span>
       <span class="brand-text">Spring</span>
     </a>
-
     <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
       <span></span><span></span><span></span>
       <span class="sr-only">Open menu</span>
     </button>
-
     <nav class="site-nav" id="site-nav" data-nav>
       <a href="#services">Services</a>
+      <a href="#packages">Packages</a>
       <a href="#process">Process</a>
       <a href="#projects">Projects</a>
+      <a href="#faq">FAQ</a>
       <a href="#contact" class="nav-cta">Start a project</a>
     </nav>
   </header>
 
   <main id="top">
+    <!-- HERO -->
     <section class="hero">
-      <div class="hero-bg" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">Prefab homes · decks · structural outdoor builds</p>
-          <h1>Engineering-led building systems, designed to go up faster and last longer.</h1>
-          <p class="hero-lede">
-            Spring helps homeowners, builders and architects create smart prefab houses,
-            decks, studios and site-ready structures with less waste, clearer pricing
-            and better buildability from day one.
+          <p class="eyebrow">Prefab homes · studios · decks · outdoor structures</p>
+          <h1>Engineered to go up faster and last longer.</h1>
+          <p class="lede">
+            Spring helps homeowners, builders and architects deliver smart prefab houses,
+            backyard studios, decks and site-ready structures — with less waste, clearer
+            pricing and better buildability from day one.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="mailto:hello@spring.net.au?subject=Project%20enquiry%20for%20Spring">Email an enquiry</a>
-            <a class="button ghost" href="#services">Explore services</a>
+            <a class="button primary large" href="#contact">Get a free project review</a>
+            <a class="button ghost large" href="#services">Explore services</a>
           </div>
           <div class="hero-proof">
             <span>Engineered packages</span>
             <span>Prefab-ready details</span>
-            <span>Buildability first</span>
+            <span>Australian standards</span>
           </div>
         </div>
-
-        <div class="hero-card" aria-label="Project summary card">
-          <div class="card-top">
-            <span class="status-dot"></span>
-            <span>Spring project model</span>
+        <div class="hero-visual">
+          <div class="hero-photo">
+            <img src="images/hero.webp" alt="Contemporary timber-clad home under a large eucalyptus tree at dusk" />
           </div>
-          <div class="model-lines">
-            <span style="--w:72%"></span>
-            <span style="--w:54%"></span>
-            <span style="--w:88%"></span>
-            <span style="--w:63%"></span>
+          <div class="hero-float two">
+            <small>Delivered as</small>
+            <strong>Drawings · quantities · install logic</strong>
           </div>
-          <div class="metric-row">
-            <div>
-              <strong>01</strong>
-              <small>Design brief</small>
-            </div>
-            <div>
-              <strong>02</strong>
-              <small>Engineering</small>
-            </div>
-            <div>
-              <strong>03</strong>
-              <small>Prefab pack</small>
-            </div>
+          <div class="hero-float one">
+            <small>Spring project model</small>
+            <strong>Brief → Engineering → Prefab pack → Build</strong>
+            <div class="float-steps"><i></i><i></i><i></i><i></i></div>
           </div>
-          <div class="site-panel">
-            <span>Site-ready output</span>
-            <b>Drawings · quantities · installation logic</b>
-          </div>
+        </div>
+      </div>
+      <div class="ribbon">
+        <div class="container ribbon-grid">
+          <div><b>Engineering-led</b><span>Structure resolved before costs lock in</span></div>
+          <div><b>Prefab-ready</b><span>Designed for off-site fabrication &amp; fast assembly</span></div>
+          <div><b>Builder-friendly</b><span>Documentation trades can price and build from</span></div>
+          <div><b>Australia-wide</b><span>Coastal, rural, bushfire-prone and sloping sites</span></div>
         </div>
       </div>
     </section>
 
+    <!-- INTRO -->
     <section class="section intro">
       <div class="container split">
-        <div>
+        <div class="intro-photos reveal">
+          <figure><img src="images/framing.webp" alt="Carpenter in safety gear measuring structural timber on site" loading="lazy" /></figure>
+          <figure><img src="images/drawings.webp" alt="Contemporary two-storey home with gabled roof and timber screen fence" loading="lazy" /></figure>
+          <figure><img src="images/cladding.webp" alt="Vertical timber cladding meeting a perforated facade" loading="lazy" /></figure>
+        </div>
+        <div class="reveal">
           <p class="eyebrow">What we do</p>
           <h2>Structures that make sense before anyone picks up a tool.</h2>
+          <p class="lede">
+            A good build is won early — in the structural logic, the material choices,
+            the junctions, the sequencing and the details that keep site work clean.
+            Spring brings engineering discipline to residential and outdoor construction,
+            so your project is easier to approve, price and build.
+          </p>
+          <ul class="check-list">
+            <li><div><b>Fewer variations on site</b><span>Details are resolved on paper, where changes are cheap.</span></div></li>
+            <li><div><b>Sharper, comparable quotes</b><span>Clear quantities mean builders price the same scope.</span></div></li>
+            <li><div><b>Faster installation</b><span>Repeatable modules and prefab components cut build time.</span></div></li>
+            <li><div><b>Less waste</b><span>Spans and member sizes are optimised to standard material lengths.</span></div></li>
+          </ul>
         </div>
-        <p>
-          A good build is won early: in the structural logic, the material choices,
-          the junctions, the sequencing and the details that keep site work clean.
-          Spring brings engineering discipline to residential and outdoor construction.
-        </p>
       </div>
     </section>
 
+    <!-- SERVICES -->
     <section class="section services" id="services">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Services</p>
           <h2>From concept to install-ready package.</h2>
+          <p class="lede">Engage Spring for a single piece of engineering or the complete design-to-documentation package. Every service is built around one goal: a structure that's simple to build and stands up for decades.</p>
         </div>
 
-        <div class="service-grid">
-          <article class="service-card">
-            <span class="service-icon">⌂</span>
-            <h3>Prefab homes & studios</h3>
-            <p>Compact dwellings, cabins, backyard studios and modular additions designed around efficient fabrication and fast assembly.</p>
+        <div class="service-list">
+          <article class="service-row reveal">
+            <div class="service-media">
+              <img src="images/prefab.webp" alt="Modern two-storey home with timber and rendered facade" loading="lazy" />
+              <span class="service-tag">Prefab homes</span>
+            </div>
+            <div class="service-body">
+              <h3>Prefab homes &amp; modular additions</h3>
+              <p>Compact dwellings, granny flats, secondary dwellings and modular extensions designed around efficient fabrication and fast, low-disruption assembly on site.</p>
+              <ul class="feature-grid">
+                <li>Modular grid planning</li>
+                <li>Transport &amp; crane logic</li>
+                <li>Steel or timber frames</li>
+                <li>Footing &amp; sub-floor design</li>
+                <li>Energy-efficient envelope</li>
+                <li>Fabricator-ready details</li>
+              </ul>
+              <p class="ideal"><b>Ideal for:</b> granny flats, holiday homes, downsizer homes, knock-down rebuilds and second dwellings.</p>
+              <a class="text-link" href="#contact" data-type="Prefab home">Discuss a prefab home</a>
+            </div>
           </article>
-          <article class="service-card">
-            <span class="service-icon">▤</span>
-            <h3>Decks & outdoor living</h3>
-            <p>Deck structures, pergolas, shade systems, steps, balustrade planning and outdoor rooms designed for real site conditions.</p>
+
+          <article class="service-row reveal">
+            <div class="service-media">
+              <img src="images/studio.webp" alt="Light-filled timber A-frame studio interior with plants" loading="lazy" />
+              <span class="service-tag">Studios &amp; cabins</span>
+            </div>
+            <div class="service-body">
+              <h3>Backyard studios, cabins &amp; retreats</h3>
+              <p>Home offices, guest studios, creative spaces and rural cabins — small footprints with big design value, engineered for simple repeatable bays and quick installation.</p>
+              <ul class="feature-grid">
+                <li>Home office &amp; guest studios</li>
+                <li>Off-grid ready options</li>
+                <li>Screw-pile &amp; pier footings</li>
+                <li>Kit-of-parts structures</li>
+                <li>Low-impact site works</li>
+                <li>Flat-pack friendly details</li>
+              </ul>
+              <p class="ideal"><b>Ideal for:</b> work-from-home spaces, Airbnb cabins, rural retreats and teenage retreats.</p>
+              <a class="text-link" href="#contact" data-type="Backyard studio / cabin">Plan a studio or cabin</a>
+            </div>
           </article>
-          <article class="service-card">
-            <span class="service-icon">⌁</span>
-            <h3>Site engineering</h3>
-            <p>Practical engineering input for footings, posts, spans, bracing, drainage, soil movement and build sequencing.</p>
+
+          <article class="service-row reveal">
+            <div class="service-media">
+              <img src="images/deck.webp" alt="Timber home with large elevated deck among trees" loading="lazy" />
+              <span class="service-tag">Decks &amp; outdoor</span>
+            </div>
+            <div class="service-body">
+              <h3>Decks, pergolas &amp; outdoor living</h3>
+              <p>Elevated decks, wrap-around verandahs, pergolas, shade structures, stairs and outdoor rooms — designed for real site conditions, wind loads, weathering and long-term durability.</p>
+              <ul class="feature-grid">
+                <li>Elevated &amp; sloping-site decks</li>
+                <li>Pergolas &amp; shade systems</li>
+                <li>Stairs &amp; balustrade planning</li>
+                <li>Hardwood, composite &amp; steel</li>
+                <li>Bushfire (BAL) considerations</li>
+                <li>Pool surrounds &amp; platforms</li>
+              </ul>
+              <p class="ideal"><b>Ideal for:</b> homeowners extending outdoor living, deck builders and landscapers needing engineering.</p>
+              <a class="text-link" href="#contact" data-type="Deck / pergola">Design a deck or pergola</a>
+            </div>
           </article>
-          <article class="service-card">
-            <span class="service-icon">◫</span>
-            <h3>Builder documentation</h3>
-            <p>Clear drawings, schedules, quantities and detail packs that help trades price, order and build with fewer surprises.</p>
+
+          <article class="service-row reveal">
+            <div class="service-media">
+              <img src="images/site.webp" alt="Construction team reviewing work on a building site" loading="lazy" />
+              <span class="service-tag">Engineering</span>
+            </div>
+            <div class="service-body">
+              <h3>Site &amp; structural engineering</h3>
+              <p>Practical engineering input where it matters most — footings, posts, spans, bracing, tie-downs, drainage, soil movement and build sequencing — written for the people who build it.</p>
+              <ul class="feature-grid">
+                <li>Footing &amp; slab design</li>
+                <li>Beam, joist &amp; post sizing</li>
+                <li>Wind &amp; tie-down design</li>
+                <li>Retaining walls</li>
+                <li>Reactive soil advice</li>
+                <li>Structural certification support</li>
+              </ul>
+              <p class="ideal"><b>Ideal for:</b> builders, owner-builders and designers who need fast, practical structural answers.</p>
+              <a class="text-link" href="#contact" data-type="Structural engineering">Request engineering</a>
+            </div>
+          </article>
+
+          <article class="service-row reveal">
+            <div class="service-media">
+              <img src="images/docs.webp" alt="Hands reviewing architectural plans with a scale ruler" loading="lazy" />
+              <span class="service-tag">Documentation</span>
+            </div>
+            <div class="service-body">
+              <h3>Builder documentation &amp; prefab packs</h3>
+              <p>Clear drawings, schedules, cutting lists and detail packs that help trades price, order and build with fewer surprises — and help fabricators make components right first time.</p>
+              <ul class="feature-grid">
+                <li>Construction drawings</li>
+                <li>Material quantities &amp; schedules</li>
+                <li>Connection &amp; junction details</li>
+                <li>Shop drawings for fabricators</li>
+                <li>Installation sequence guides</li>
+                <li>Approval-ready documentation</li>
+              </ul>
+              <p class="ideal"><b>Ideal for:</b> projects heading to tender, council or private certification, or off-site manufacture.</p>
+              <a class="text-link" href="#contact" data-type="Documentation pack">Get a documentation pack</a>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
+    <!-- BAND -->
+    <section class="band">
+      <img src="images/band.webp" alt="Rural cabin on a hillside at sunset" loading="lazy" />
+      <div class="container">
+        <div class="band-copy reveal">
+          <p class="eyebrow">Designed for assembly</p>
+          <h2>Build more in the factory. Spend less time on site.</h2>
+          <p>Prefabrication works best when it's designed in from the start. We plan structures around transportable modules, repeatable bays and standard material sizes — so more work happens in controlled conditions and less is left to weather, access and guesswork.</p>
+          <div class="band-stats">
+            <div><b>Repeatable bays</b><span>Simpler fabrication</span></div>
+            <div><b>Standard lengths</b><span>Less offcut waste</span></div>
+            <div><b>Clear sequencing</b><span>Faster, safer installs</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section class="section" id="packages">
+      <div class="container">
+        <div class="section-heading center">
+          <p class="eyebrow">Ways to work with us</p>
+          <h2>Pick the level of support you need.</h2>
+          <p class="lede">Fixed-fee proposals after a short brief — so you know the cost of design and engineering before you commit.</p>
+        </div>
+        <div class="package-grid">
+          <article class="package reveal">
+            <span class="package-label">Starter</span>
+            <h3>Feasibility Check</h3>
+            <p class="package-sub">Find out what's possible on your site before you spend on full design.</p>
+            <ul>
+              <li>Site, access &amp; constraint review</li>
+              <li>Structural concept &amp; system options</li>
+              <li>Prefab vs. traditional build advice</li>
+              <li>Indicative material approach</li>
+              <li>Written summary &amp; next steps</li>
+            </ul>
+            <a class="button ghost" href="#contact" data-type="Feasibility Check">Book a feasibility check</a>
+          </article>
+          <article class="package featured reveal">
+            <span class="badge">Most popular</span>
+            <span class="package-label">Complete</span>
+            <h3>Engineering Pack</h3>
+            <p class="package-sub">Everything a builder needs to price, approve and build your structure.</p>
+            <ul>
+              <li>Everything in Feasibility Check</li>
+              <li>Full structural design &amp; calculations</li>
+              <li>Construction drawings &amp; key details</li>
+              <li>Material quantities &amp; schedules</li>
+              <li>Approval-ready documentation</li>
+              <li>Builder Q&amp;A during pricing</li>
+            </ul>
+            <a class="button lime" href="#contact" data-type="Engineering Pack">Request an engineering pack</a>
+          </article>
+          <article class="package reveal">
+            <span class="package-label">End-to-end</span>
+            <h3>Prefab Partner</h3>
+            <p class="package-sub">Design, fabrication documentation and support right through installation.</p>
+            <ul>
+              <li>Everything in Engineering Pack</li>
+              <li>Prefab module &amp; component design</li>
+              <li>Fabricator shop drawings</li>
+              <li>Installation sequence guide</li>
+              <li>Build-phase detail support</li>
+            </ul>
+            <a class="button ghost" href="#contact" data-type="Prefab Partner">Talk about a prefab partnership</a>
+          </article>
+        </div>
+        <p class="packages-note">Not sure which fits? Send us your brief and we'll recommend the right scope.</p>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
     <section class="section process" id="process">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Process</p>
           <h2>A simple path from idea to buildable structure.</h2>
+          <p class="lede">Clear stages, clear deliverables and one point of contact the whole way through.</p>
         </div>
-
         <div class="timeline">
-          <article>
-            <span>1</span>
+          <article class="reveal">
+            <span class="num">1</span>
             <h3>Brief</h3>
             <p>We clarify the site, use, constraints, budget range and the outcome you want.</p>
+            <p class="deliver">You get: a fixed-fee proposal</p>
           </article>
-          <article>
-            <span>2</span>
+          <article class="reveal">
+            <span class="num">2</span>
             <h3>Design logic</h3>
             <p>We map the structure, spans, materials, access and construction sequence.</p>
+            <p class="deliver">You get: a structural concept</p>
           </article>
-          <article>
-            <span>3</span>
+          <article class="reveal">
+            <span class="num">3</span>
             <h3>Engineering pack</h3>
-            <p>You receive clear documentation for pricing, approvals, fabrication and site work.</p>
+            <p>Clear documentation for pricing, approvals, fabrication and site work.</p>
+            <p class="deliver">You get: drawings, calcs &amp; schedules</p>
           </article>
-          <article>
-            <span>4</span>
+          <article class="reveal">
+            <span class="num">4</span>
             <h3>Build support</h3>
             <p>We help resolve details before and during the build so the project keeps moving.</p>
+            <p class="deliver">You get: answers when trades need them</p>
           </article>
         </div>
       </div>
     </section>
 
+    <!-- PROJECTS -->
     <section class="section projects" id="projects">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Example project types</p>
           <h2>Built for practical Australian sites.</h2>
+          <p class="lede">From suburban backyards to sloping coastal blocks and remote rural land — the kinds of structures we help design and engineer.</p>
         </div>
+        <div class="gallery">
+          <figure class="g-wide g-tall reveal">
+            <img src="images/g_pool.webp" alt="Two-storey Queenslander-style home with verandahs and pool" loading="lazy" />
+            <figcaption><b>Family home &amp; verandahs</b><span>Upper-level verandahs, pool surround and outdoor living</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <img src="images/g_cabin.webp" alt="Timber cabin in a forest clearing" loading="lazy" />
+            <figcaption><b>Rural prefab retreat</b><span>Repeatable bays, simple install</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <img src="images/g_wrap.webp" alt="Timber home with wrap-around elevated deck at sunset" loading="lazy" />
+            <figcaption><b>Wrap-around deck</b><span>Elevated platform on a sloping site</span></figcaption>
+          </figure>
+          <figure class="g-wide reveal">
+            <img src="images/g_modern.webp" alt="Minimal white rendered home with courtyard" loading="lazy" />
+            <figcaption><b>Courtyard home</b><span>Clean junctions and long-span openings</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <img src="images/g_interior.webp" alt="Warm living room with clerestory windows and timber floors" loading="lazy" />
+            <figcaption><b>Open-plan extension</b><span>Long spans, clerestory light</span></figcaption>
+          </figure>
+          <figure class="reveal">
+            <img src="images/g_red.webp" alt="Small red cabin on a grassy hill" loading="lazy" />
+            <figcaption><b>Compact studio</b><span>Small footprint, big impact</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-image image-one"></div>
+    <!-- AUDIENCE -->
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Who we work with</p>
+          <h2>One engineering partner, three kinds of clients.</h2>
+        </div>
+        <div class="audience-grid">
+          <article class="audience reveal">
+            <img src="images/a_home.webp" alt="Classic weatherboard home with white picket fence" loading="lazy" />
             <div>
-              <h3>Rural prefab retreat</h3>
-              <p>Low-impact cabin design with repeatable structural bays and simple site installation.</p>
+              <h3>Homeowners</h3>
+              <p>Planning a granny flat, studio, deck or extension? We help you understand what's buildable, get comparable quotes and avoid costly surprises.</p>
             </div>
           </article>
-          <article class="project-card">
-            <div class="project-image image-two"></div>
+          <article class="audience reveal">
+            <img src="images/a_builder.webp" alt="Construction workers placing reinforcement on a slab" loading="lazy" />
             <div>
-              <h3>Large timber deck</h3>
-              <p>Outdoor living platforms designed around views, access, weathering and long-term durability.</p>
+              <h3>Builders &amp; trades</h3>
+              <p>Fast, practical engineering and documentation that fits how you actually build — with someone to call when a detail needs a quick answer.</p>
             </div>
           </article>
-          <article class="project-card">
-            <div class="project-image image-three"></div>
+          <article class="audience reveal">
+            <img src="images/a_arch.webp" alt="Contemporary white residence with pool" loading="lazy" />
             <div>
-              <h3>Backyard studio</h3>
-              <p>A compact, engineered work or guest space with clean junctions and prefabrication potential.</p>
+              <h3>Architects &amp; designers</h3>
+              <p>Structural collaboration that protects design intent while resolving spans, connections and prefab opportunities early.</p>
             </div>
           </article>
         </div>
       </div>
     </section>
 
+    <!-- VALUES -->
     <section class="section values">
-      <div class="container value-grid">
-        <div>
+      <div class="container">
+        <div class="section-heading">
           <p class="eyebrow">Why Spring</p>
           <h2>Less guesswork. Better decisions. Cleaner builds.</h2>
         </div>
-        <div class="value-list">
-          <div>
+        <div class="value-grid">
+          <div class="value reveal">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/></svg></div>
             <h3>Engineer early</h3>
-            <p>Resolve the structure before the design becomes expensive to change.</p>
+            <p>Resolve the structure before the design becomes expensive to change. Early engineering is the cheapest insurance a project can buy.</p>
           </div>
-          <div>
+          <div class="value reveal">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
             <h3>Design for assembly</h3>
-            <p>Every detail should help the project move faster on site.</p>
+            <p>Every detail should help the project move faster on site — fewer unique parts, logical sequencing and connections that are easy to get right.</p>
           </div>
-          <div>
+          <div class="value reveal">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
             <h3>Document clearly</h3>
-            <p>Builders, fabricators and clients should all know exactly what is being delivered.</p>
+            <p>Builders, fabricators, certifiers and clients should all know exactly what is being delivered — no ambiguity, no guesswork.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="contact" id="contact">
-      <div class="container contact-card">
+    <!-- MATERIALS -->
+    <section class="section">
+      <div class="container materials">
+        <div class="materials-photo reveal">
+          <img src="images/materials.webp" alt="Contemporary living space with timber floors and natural light" loading="lazy" />
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">Systems &amp; materials</p>
+          <h2>The right structure for the site, the budget and the climate.</h2>
+          <p class="lede">We're material-agnostic. We recommend the system that suits your site conditions, durability needs, bushfire or coastal exposure, and how the structure will be built and transported.</p>
+          <div class="chip-row">
+            <span class="chip">Timber framing</span>
+            <span class="chip">Light-gauge steel</span>
+            <span class="chip">Structural steel</span>
+            <span class="chip">CLT &amp; engineered timber</span>
+            <span class="chip">SIPs panels</span>
+            <span class="chip">Hardwood decking</span>
+            <span class="chip">Composite decking</span>
+            <span class="chip">Screw piles</span>
+            <span class="chip">Concrete footings &amp; slabs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section values" id="faq">
+      <div class="container faq-wrap">
         <div>
+          <p class="eyebrow">FAQ</p>
+          <h2>Good questions to ask early.</h2>
+          <p class="lede">Can't see your question? Email us — we're happy to give a quick steer before you commit to anything.</p>
+          <a class="button primary" href="mailto:hello@spring.net.au" style="margin-top:12px">Ask a question</a>
+        </div>
+        <div class="faq">
+          <details open>
+            <summary>Do you build the structures as well?</summary>
+            <p>Spring focuses on design, engineering and documentation. We work alongside your chosen builder or fabricator — or can help connect you with trades experienced in the type of structure you're planning.</p>
+          </details>
+          <details>
+            <summary>Is prefab actually faster or cheaper?</summary>
+            <p>Prefab can shorten time on site and reduce waste, especially on remote, tight-access or weather-exposed sites. Whether it's cheaper depends on the project — our Feasibility Check compares the options honestly for your site.</p>
+          </details>
+          <details>
+            <summary>Can your documentation be used for council or certifier approval?</summary>
+            <p>Yes. Our Engineering Pack is prepared to support development and building approval submissions, with drawings and structural information your certifier or council will expect.</p>
+          </details>
+          <details>
+            <summary>What do you need from me to get started?</summary>
+            <p>A site address, a rough description of what you want to build, any sketches, photos or existing drawings, and your timing and budget range. That's enough for us to prepare a fixed-fee proposal.</p>
+          </details>
+          <details>
+            <summary>Do you work outside major cities?</summary>
+            <p>Absolutely. Much of our work suits regional and rural sites, where clear documentation and prefab-ready design make the biggest difference to cost and time.</p>
+          </details>
+          <details>
+            <summary>How are your fees structured?</summary>
+            <p>After a short brief we provide a fixed-fee proposal for the agreed scope, so you know the design and engineering cost up front — no open-ended hourly billing.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section" id="contact">
+      <div class="container contact-card">
+        <div class="contact-info">
+          <img src="images/contact.webp" alt="" aria-hidden="true" loading="lazy" />
           <p class="eyebrow">Start your project</p>
           <h2>Have a prefab house, deck or outdoor structure in mind?</h2>
-          <p>Send through your site address, a rough scope, drawings or sketches if you have them, and what you want the structure to achieve.</p>
+          <p>Tell us a little about your project and we'll come back with practical next steps and a fixed-fee proposal.</p>
+          <ul class="contact-points">
+            <li>Free initial project review</li>
+            <li>Fixed-fee proposals — no surprises</li>
+            <li>Homeowners, builders &amp; architects welcome</li>
+            <li>Projects across Australia</li>
+          </ul>
+          <a class="contact-email" href="mailto:hello@spring.net.au">hello@spring.net.au</a>
         </div>
-        <a class="button primary large" href="mailto:hello@spring.net.au?subject=Project%20enquiry%20for%20Spring&body=Hi%20Spring%2C%0A%0AI%27d%20like%20to%20discuss%20a%20project.%0A%0AProject%20type%3A%0ASite%20address%3A%0ATiming%3A%0ABudget%20range%3A%0A%0AThanks%2C">
-          hello@spring.net.au
-        </a>
+        <form class="enquiry" data-enquiry>
+          <h3>Project enquiry</h3>
+          <p>Fill this in and we'll open a pre-filled email for you to send.</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input id="f-name" name="name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-type">Project type</label>
+              <select id="f-type" name="type" data-type-select>
+                <option>Prefab home</option>
+                <option>Backyard studio / cabin</option>
+                <option>Deck / pergola</option>
+                <option>Structural engineering</option>
+                <option>Documentation pack</option>
+                <option>Feasibility Check</option>
+                <option>Engineering Pack</option>
+                <option>Prefab Partner</option>
+                <option>Something else</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-timing">Timing</label>
+              <select id="f-timing" name="timing">
+                <option>As soon as possible</option>
+                <option>In the next 3 months</option>
+                <option>3–6 months</option>
+                <option>6+ months / exploring</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-site">Site suburb / town</label>
+            <input id="f-site" name="site" placeholder="e.g. Byron Bay NSW" />
+          </div>
+          <div class="field">
+            <label for="f-msg">Tell us about the project</label>
+            <textarea id="f-msg" name="message" placeholder="What do you want to build, what's the site like, and what should it achieve?"></textarea>
+          </div>
+          <button class="button primary large" type="submit">Send enquiry</button>
+          <p class="form-note">Opens your email app, addressed to hello@spring.net.au.</p>
+        </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <a class="brand footer-brand" href="#top" aria-label="Spring home">
-          <span class="brand-mark">S</span>
-          <span class="brand-text">Spring</span>
-        </a>
-        <p>Engineering-led prefab houses, decks and outdoor structures.</p>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand footer-brand" href="#top" aria-label="Spring home">
+            <span class="brand-mark">S</span>
+            <span class="brand-text">Spring</span>
+          </a>
+          <p>Engineering-led prefab houses, backyard studios, decks and outdoor structures for practical Australian sites.</p>
+        </div>
+        <div>
+          <strong>Services</strong>
+          <a href="#services">Prefab homes</a>
+          <a href="#services">Studios &amp; cabins</a>
+          <a href="#services">Decks &amp; pergolas</a>
+          <a href="#services">Structural engineering</a>
+          <a href="#services">Documentation</a>
+        </div>
+        <div>
+          <strong>Company</strong>
+          <a href="#packages">Packages</a>
+          <a href="#process">Process</a>
+          <a href="#projects">Projects</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <strong>Contact</strong>
+          <a href="mailto:hello@spring.net.au">hello@spring.net.au</a>
+          <a href="#contact">Start a project</a>
+        </div>
       </div>
-      <div>
-        <strong>Contact</strong>
-        <a href="mailto:hello@spring.net.au">hello@spring.net.au</a>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> Spring. All rights reserved.</span>
+        <span>spring.net.au</span>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    (function () {
+      var header = document.querySelector('[data-header]');
+      var nav = document.querySelector('[data-nav]');
+      var toggle = document.querySelector('[data-menu-toggle]');
+
+      function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 20); }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      toggle.addEventListener('click', function () {
+        var open = nav.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      nav.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          nav.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // Pre-select project type when a service/package link is clicked
+      var select = document.querySelector('[data-type-select]');
+      document.querySelectorAll('[data-type]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var t = el.getAttribute('data-type');
+          for (var i = 0; i < select.options.length; i++) {
+            if (select.options[i].text === t) { select.selectedIndex = i; break; }
+          }
+        });
+      });
+
+      // Enquiry form -> pre-filled email (no server needed)
+      var form = document.querySelector('[data-enquiry]');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var f = form.elements;
+        var body =
+          'Hi Spring,\n\nI\'d like to discuss a project.\n\n' +
+          'Name: ' + f.name.value + '\n' +
+          'Phone: ' + f.phone.value + '\n' +
+          'Project type: ' + f.type.value + '\n' +
+          'Timing: ' + f.timing.value + '\n' +
+          'Site: ' + f.site.value + '\n\n' +
+          f.message.value + '\n\nThanks,\n' + f.name.value;
+        window.location.href = 'mailto:hello@spring.net.au?subject=' +
+          encodeURIComponent('Project enquiry: ' + f.type.value) +
+          '&body=' + encodeURIComponent(body);
+      });
+
+      // Reveal on scroll
+      var items = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        items.forEach(function (el) { io.observe(el); });
+      } else {
+        items.forEach(function (el) { el.classList.add('is-visible'); });
+      }
+
+      var y = document.querySelector('[data-year]');
+      if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
